@@ -1,9 +1,12 @@
 const express = require("express");
+const setPosts = require("../controllers/post.controller");
 const router = express.Router();
 
 router.get("/", (req, res) => {
   res.json({ message: "voici les données" });
 });
+
+router.post("/", setPosts);
 
 router.post("/", (req, res) => {
   console.log(req.body);
