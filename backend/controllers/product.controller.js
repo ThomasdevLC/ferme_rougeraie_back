@@ -7,7 +7,7 @@ module.exports.getProducts = async (req, res) => {
 
 module.exports.setProducts = async (req, res) => {
   if (!req.body.title) {
-    res.status(400).json({ message: "merci d'ajouter un produit" });
+    res.status(400).json({ error: "merci d'ajouter un produit" });
   }
   const product = await ProductModel.create({
     title: req.body.title,
@@ -21,7 +21,7 @@ module.exports.editProduct = async (req, res) => {
   const product = await ProductModel.findById(req.params.id);
 
   if (!product) {
-    res.status(400).json({ message: "ce produit n'existe pas" });
+    res.status(400).json({ error: "ce produit n'existe pas" });
   }
   const updateProduct = await ProductModel.findByIdAndUpdate(
     product,
@@ -38,10 +38,10 @@ module.exports.deleteProduct = async (req, res) => {
   const product = await ProductModel.findById(req.params.id);
 
   if (!product) {
-    res.status(400).json({ message: "ce produit n'existe pas" });
+    res.status(400).json({ error: "ce produit n'existe pas" });
   }
   await product.deleteOne();
-  res.status(200).json("message " + req.params.id + " supprimé");
+  res.status(200).json("produit " + req.params.id + " supprimé");
 };
 
 module.exports.updateDisplay = async (req, res) => {
