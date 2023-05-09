@@ -56,7 +56,7 @@ module.exports.updateDisplay = async (req, res) => {
       return res.status(404).json({ error: "Product not found" });
     }
 
-    product.isDisplayed = !product.isDisplayed; // toggle isDisplayed property
+    product.isDisplayed = !product.isDisplayed;
 
     const updatedProduct = await product.save();
 
