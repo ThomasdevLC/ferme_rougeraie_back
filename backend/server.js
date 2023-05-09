@@ -12,6 +12,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use("/product", require("./routes/product.routes"));
+app.use("/order", require("./routes/order.routes"));
 
 // Start server
 app.listen(port), () => console.log("serveur démarré port : " + port);

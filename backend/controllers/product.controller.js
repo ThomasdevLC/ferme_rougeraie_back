@@ -6,12 +6,16 @@ module.exports.getProducts = async (req, res) => {
 };
 
 module.exports.setProducts = async (req, res) => {
-  if (!req.body.title) {
+  if (!req.body.name) {
     res.status(400).json({ error: "merci d'ajouter un produit" });
   }
   const product = await ProductModel.create({
-    title: req.body.title,
+    name: req.body.name,
+    price: req.body.price,
+    unit: req.body.unit,
+    interval: req.body.interval,
     isDisplayed: true,
+    image: req.body.image,
   });
 
   res.status(200).json(product);
