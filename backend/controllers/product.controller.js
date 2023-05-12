@@ -1,5 +1,7 @@
 const ProductModel = require("../models/product.model");
 const fs = require("fs");
+const multer = require("../middleware/multer-config");
+const path = require("path");
 
 module.exports.getProducts = async (req, res) => {
   const products = await ProductModel.find();
@@ -23,20 +25,43 @@ module.exports.createProduct = async (req, res) => {
 };
 
 module.exports.editProduct = async (req, res) => {
-  const product = await ProductModel.findById(req.params.id);
+  try {
+    const { id } = req.params;
+    const { name, price, unit, interval, isDisplayed, image } = req.body;
 
-  if (!product) {
-    res.status(400).json({ error: "ce produit n'existe pas" });
-  }
-  const updateProduct = await ProductModel.findByIdAndUpdate(
-    product,
-    req.body,
-    {
-      new: true,
+    let newImage;
+    if (req.file) {
+      newImage = req.file.path;
+
+      if (image && fs.existsSync(image)) {
+        // Supprimer l'image précédente
+        try {
+          fs.unlinkSync(image);
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    } else {
+      newImage = image;
     }
-  );
 
-  res.status(200).json(updateProduct);
+    const product = await ProductModel.findByIdAndUpdate(
+      id,
+      {
+        name,
+        price,
+        unit,
+        interval,
+        isDisplayed,
+        image: newImage,
+      },
+      { new: true }
+    );
+
+    res.status(200).json(product);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
 module.exports.deleteProduct = async (req, res) => {
@@ -45,6 +70,8 @@ module.exports.deleteProduct = async (req, res) => {
   if (!product) {
     res.status(400).json({ error: "ce produit n'existe pas" });
   }
+  fs.unlinkSync(product.image);
+
   await product.deleteOne();
   res.status(200).json("produit " + req.params.id + " supprimé");
 };
