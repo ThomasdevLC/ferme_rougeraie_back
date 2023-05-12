@@ -1,6 +1,7 @@
 const express = require("express");
+const multer = require("../middleware/multer-config");
 const {
-  setProducts,
+  createProduct,
   getProducts,
   editProduct,
   deleteProduct,
@@ -9,7 +10,7 @@ const {
 const router = express.Router();
 
 router.get("/", getProducts);
-router.post("/", setProducts);
+router.post("/", multer, createProduct);
 router.put("/:id", editProduct);
 router.delete("/:id", deleteProduct);
 router.patch("/:id", updateDisplay);

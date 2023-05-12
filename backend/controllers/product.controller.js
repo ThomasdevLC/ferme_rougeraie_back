@@ -1,11 +1,12 @@
 const ProductModel = require("../models/product.model");
+const fs = require("fs");
 
 module.exports.getProducts = async (req, res) => {
   const products = await ProductModel.find();
   res.status(200).json(products);
 };
 
-module.exports.setProducts = async (req, res) => {
+module.exports.createProduct = async (req, res) => {
   if (!req.body.name) {
     res.status(400).json({ error: "merci d'ajouter un produit" });
   }
@@ -15,7 +16,7 @@ module.exports.setProducts = async (req, res) => {
     unit: req.body.unit,
     interval: req.body.interval,
     isDisplayed: true,
-    image: req.body.image,
+    image: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`,
   });
 
   res.status(200).json(product);

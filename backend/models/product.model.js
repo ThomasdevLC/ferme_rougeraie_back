@@ -15,7 +15,7 @@ const productSchema = mongoose.Schema({
   },
   interval: {
     type: Number,
-    required: true,
+    // required: true,
   },
   isDisplayed: {
     type: Boolean,
