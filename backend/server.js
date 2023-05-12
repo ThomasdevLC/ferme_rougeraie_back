@@ -11,9 +11,8 @@ app.use(cors());
 connectDB();
 
 // Middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cors());
+app.use(express.json({ limit: "50mb" })),
+  app.use(express.urlencoded({ extended: false }));
 
 app.use("/product", require("./routes/product.routes"));
 app.use("/order", require("./routes/order.routes"));
