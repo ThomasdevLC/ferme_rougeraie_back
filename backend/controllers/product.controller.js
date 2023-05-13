@@ -27,36 +27,26 @@ module.exports.createProduct = async (req, res) => {
 module.exports.editProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, price, unit, interval, isDisplayed, image } = req.body;
+    const { name, price, unit, interval, isDisplayed } = req.body;
 
-    let newImage;
+    let updateData = {
+      name,
+      price,
+      unit,
+      interval,
+      isDisplayed,
+    };
+
+    // Check if an image file was uploaded
     if (req.file) {
-      newImage = req.file.path;
-
-      if (image && fs.existsSync(image)) {
-        // Supprimer l'image précédente
-        try {
-          fs.unlinkSync(image);
-        } catch (err) {
-          console.log(err);
-        }
-      }
-    } else {
-      newImage = image;
+      updateData.image = `${req.protocol}://${req.get("host")}/images/${
+        req.file.filename
+      }`;
     }
 
-    const product = await ProductModel.findByIdAndUpdate(
-      id,
-      {
-        name,
-        price,
-        unit,
-        interval,
-        isDisplayed,
-        image: newImage,
-      },
-      { new: true }
-    );
+    const product = await ProductModel.findByIdAndUpdate(id, updateData, {
+      new: true,
+    });
 
     res.status(200).json(product);
   } catch (error) {

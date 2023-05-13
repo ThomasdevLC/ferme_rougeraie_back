@@ -11,7 +11,7 @@ const router = express.Router();
 
 router.get("/", getProducts);
 router.post("/", multer, createProduct);
-router.put("/:id", multer, editProduct);
+router.patch("/:id", multer, editProduct);
 router.delete("/:id", deleteProduct);
 router.patch("/:id", updateDisplay);
 
