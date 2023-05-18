@@ -35,7 +35,6 @@ module.exports.updateOrderStatus = async (req, res) => {
     }
 
     res.status(200).json(updatedOrder);
-    console.log(updatedOrder);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Server error" });

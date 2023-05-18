@@ -10,7 +10,7 @@ module.exports.getProducts = async (req, res) => {
 
 module.exports.createProduct = async (req, res) => {
   if (!req.body.name) {
-    res.status(400).json({ error: "merci d'ajouter un produit" });
+    res.status(400).json({ error: "no product added" });
   }
   const product = await ProductModel.create({
     name: req.body.name,
@@ -18,6 +18,7 @@ module.exports.createProduct = async (req, res) => {
     unit: req.body.unit,
     interval: req.body.interval,
     isDisplayed: true,
+    limited: false,
     image: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`,
   });
 
@@ -58,12 +59,11 @@ module.exports.deleteProduct = async (req, res) => {
   const product = await ProductModel.findById(req.params.id);
 
   if (!product) {
-    res.status(400).json({ error: "ce produit n'existe pas" });
+    res.status(400).json({ error: "Product not found" });
   }
-  fs.unlinkSync(product.image);
-
+  // fs.unlinkSync(product.image);
   await product.deleteOne();
-  res.status(200).json("produit " + req.params.id + " supprimé");
+  res.status(200).json("product " + req.params.id + " deleted");
 };
 
 module.exports.updateDisplay = async (req, res) => {
@@ -75,6 +75,24 @@ module.exports.updateDisplay = async (req, res) => {
     }
 
     product.isDisplayed = !product.isDisplayed;
+
+    const updatedProduct = await product.save();
+
+    res.json(updatedProduct);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+module.exports.updateLimited = async (req, res) => {
+  try {
+    const product = await ProductModel.findById(req.params.id);
+    if (!product) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+
+    product.limited = !product.limited;
 
     const updatedProduct = await product.save();
 

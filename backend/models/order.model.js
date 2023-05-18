@@ -5,7 +5,7 @@ const orderSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  email: {
+  pickup: {
     type: String,
     required: true,
   },
@@ -28,13 +28,13 @@ const orderSchema = new mongoose.Schema({
         required: true,
       },
       totalPrice: {
-        type: String,
+        type: Number,
         required: true,
       },
     },
   ],
   total: {
-    type: String,
+    type: Number,
     required: true,
   },
   date: {
