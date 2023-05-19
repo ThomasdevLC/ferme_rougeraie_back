@@ -9,7 +9,7 @@ const orderSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  telephone: {
+  phone: {
     type: String,
     required: true,
   },
