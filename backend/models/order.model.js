@@ -5,6 +5,10 @@ const orderSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  surname: {
+    type: String,
+    required: true,
+  },
   pickup: {
     type: String,
     required: true,
