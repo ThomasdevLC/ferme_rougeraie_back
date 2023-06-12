@@ -1,6 +1,6 @@
 const express = require("express");
 const multer = require("../middleware/multer-config");
-const authMiddleware = require("../middleware/auth");
+const authMiddleware = require("../middleware/authMiddleware");
 
 const {
   createProduct,
@@ -14,9 +14,9 @@ const router = express.Router();
 
 router.get("/", getProducts);
 router.post("/", authMiddleware, multer, createProduct);
-router.patch("/:id", multer, editProduct);
-router.delete("/:id", deleteProduct);
-router.patch("/:id/display", updateDisplay);
-router.patch("/:id/limited", updateLimited);
+router.patch("/:id", authMiddleware, multer, editProduct);
+router.delete("/:id", authMiddleware, deleteProduct);
+router.patch("/:id/display", authMiddleware, updateDisplay);
+router.patch("/:id/limited", authMiddleware, updateLimited);
 
 module.exports = router;
