@@ -26,8 +26,8 @@ app.use("/images", express.static(path.join(__dirname, "images")));
 app.post("/auth/login", async (req, res) => {
   const { password } = req.body;
 
-  console.log("ADMIN_PASSWORD:", process.env.ADMIN_PASSWORD);
-  console.log("Password provided:", password);
+  // console.log("ADMIN_PASSWORD:", process.env.ADMIN_PASSWORD);
+  // console.log("Password provided:", password);
 
   try {
     // check password
