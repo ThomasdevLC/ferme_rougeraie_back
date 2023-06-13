@@ -22,35 +22,48 @@ app.use("/product", require("./routes/product.routes"));
 app.use("/order", require("./routes/order.routes"));
 app.use("/images", express.static(path.join(__dirname, "images")));
 
-// connection
-app.post("/auth/login", async (req, res) => {
-  const { password } = req.body;
+// Hash the password
+const saltRounds = 10;
+const userPassword = process.env.ADMIN_PASSWORD;
 
-  // console.log("ADMIN_PASSWORD:", process.env.ADMIN_PASSWORD);
-  // console.log("Password provided:", password);
-
-  try {
-    // check password
-    const isPasswordValid = bcrypt.compare(
-      password,
-      process.env.ADMIN_PASSWORD
-    );
-
-    if (!isPasswordValid) {
-      return res.status(401).json({ message: "Mot de passe incorrect" });
-    }
-
-    // create token JWT
-    const token = jwt.sign({}, process.env.JWT_SECRET, {
-      expiresIn: "1h",
-    });
-
-    res.json({ token });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Erreur du serveur" });
+bcrypt.hash(userPassword, saltRounds, function (err, hash) {
+  if (err) {
+    console.error(err);
+    return;
   }
-});
+  process.env.ADMIN_PASSWORD = hash;
+  console.log("Hashed password:", hash);
 
-// Start server
-app.listen(port), () => console.log("serveur démarré port : " + port);
+  // connection
+  app.post("/auth/login", async (req, res) => {
+    const { password } = req.body;
+
+    console.log("ADMIN_PASSWORD:", process.env.ADMIN_PASSWORD);
+    console.log("Password provided:", password);
+
+    try {
+      // check password
+      const isPasswordValid = await bcrypt.compare(
+        password,
+        process.env.ADMIN_PASSWORD
+      );
+
+      if (!isPasswordValid) {
+        return res.status(401).json({ message: "Mot de passe incorrect" });
+      }
+
+      // create token JWT
+      const token = jwt.sign({}, process.env.JWT_SECRET, {
+        expiresIn: "1h",
+      });
+
+      res.json({ token });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Erreur du serveur" });
+    }
+  });
+
+  // Start server
+  app.listen(port, () => console.log("Serveur démarré sur le port : " + port));
+});
