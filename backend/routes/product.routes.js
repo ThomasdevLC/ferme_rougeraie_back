@@ -9,6 +9,8 @@ const {
   deleteProduct,
   updateDisplay,
   updateLimited,
+  updateClosedShop,
+  getClosedShop,
 } = require("../controllers/product.controller");
 const router = express.Router();
 
@@ -18,5 +20,6 @@ router.patch("/:id", authMiddleware, multer, editProduct);
 router.delete("/:id", authMiddleware, deleteProduct);
 router.patch("/:id/display", authMiddleware, updateDisplay);
 router.patch("/:id/limited", authMiddleware, updateLimited);
-
+router.patch("/closedShop", authMiddleware, updateClosedShop);
+router.get("/closedShop", authMiddleware, getClosedShop);
 module.exports = router;

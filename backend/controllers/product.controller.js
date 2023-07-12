@@ -102,3 +102,26 @@ module.exports.updateLimited = async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 };
+
+let closedShop = false; // Variable pour stocker la valeur de closedShop
+
+module.exports.updateClosedShop = async (req, res) => {
+  try {
+    const { closedShop: newClosedShop } = req.body;
+    closedShop = newClosedShop; // Mettez à jour la valeur de closedShop avec la nouvelle valeur fournie dans le corps de la requête
+    console.log(closedShop);
+    res.json({ closedShop });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+module.exports.getClosedShop = async (req, res) => {
+  try {
+    res.json({ closedShop });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
