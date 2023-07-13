@@ -9,5 +9,5 @@ const {
 
 // POST /orders
 router.patch("/", authMiddleware, updateClosedShop);
-router.get("/", authMiddleware, getClosedShop);
+router.get("/", getClosedShop);
 module.exports = router;
