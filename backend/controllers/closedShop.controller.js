@@ -30,3 +30,35 @@ module.exports.getClosedShop = async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 };
+
+module.exports.updateClosedShopMessage = async (req, res) => {
+  try {
+    const { message } = req.body; // Récupérez le message du corps de la requête
+    console.log(req.body, "body");
+
+    await ClosedShop.findOneAndUpdate(
+      {},
+      { message: message }, // Mettez à jour uniquement le message
+      { upsert: true }
+    );
+
+    res.json({ message: message });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Erreur du serveur" });
+  }
+};
+
+module.exports.getClosedShopMessage = async (req, res) => {
+  try {
+    const closedShop = await ClosedShop.findOne();
+    if (!closedShop) {
+      res.status(404).json({ message: "Message not found" });
+    } else {
+      res.status(200).json({ message: closedShop.message });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
