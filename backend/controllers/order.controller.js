@@ -42,8 +42,10 @@ module.exports.updateOrderStatus = async (req, res) => {
 };
 module.exports.deleteOrders = async (req, res) => {
   try {
-    const result = await Order.deleteMany({});
-    res.status(200).json({ message: "All orders deleted", result });
+    const result = await Order.deleteMany({ status: "done" }); // Supprimer les commandes terminées
+
+    console.log("clear", result);
+    res.status(200).json({ message: `${result.deletedCount} orders deleted` });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Server error" });
