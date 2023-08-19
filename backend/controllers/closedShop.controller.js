@@ -33,19 +33,19 @@ module.exports.getClosedShop = async (req, res) => {
 
 module.exports.updateClosedShopMessage = async (req, res) => {
   try {
-    const { message } = req.body; // Récupérez le message du corps de la requête
+    const { message } = req.body;
     console.log(req.body, "body");
 
     await ClosedShop.findOneAndUpdate(
       {},
-      { message: message }, // Mettez à jour uniquement le message
+      { message: message },
       { upsert: true }
     );
 
     res.json({ message: message });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Erreur du serveur" });
+    res.status(500).json({ error: "Server error" });
   }
 };
 
