@@ -25,6 +25,36 @@ module.exports.createProduct = async (req, res) => {
   res.status(200).json(product);
 };
 
+// module.exports.editProduct = async (req, res) => {
+//   try {
+//     const { id } = req.params;
+//     const { name, price, unit, interval, isDisplayed } = req.body;
+
+//     let updateData = {
+//       name,
+//       price,
+//       unit,
+//       interval,
+//       isDisplayed,
+//     };
+
+//     // Check if an image file was uploaded
+//     if (req.file) {
+//       updateData.image = `${req.protocol}://${req.get("host")}/images/${
+//         req.file.filename
+//       }`;
+//     }
+
+//     const product = await ProductModel.findByIdAndUpdate(id, updateData, {
+//       new: true,
+//     });
+
+//     res.status(200).json(product);
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   }
+// };
+
 module.exports.editProduct = async (req, res) => {
   try {
     const { id } = req.params;
@@ -40,6 +70,21 @@ module.exports.editProduct = async (req, res) => {
 
     // Check if an image file was uploaded
     if (req.file) {
+      // Fetch the existing product to get the old image path
+      const existingProduct = await ProductModel.findById(id);
+      if (existingProduct) {
+        // Delete the old image
+        const oldImagePath = path.join(
+          __dirname,
+          "../images",
+          existingProduct.image.split("/images/")[1]
+        );
+        if (fs.existsSync(oldImagePath)) {
+          fs.unlinkSync(oldImagePath);
+        }
+      }
+
+      // Update the image URL with the new image
       updateData.image = `${req.protocol}://${req.get("host")}/images/${
         req.file.filename
       }`;
