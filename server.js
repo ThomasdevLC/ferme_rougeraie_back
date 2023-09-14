@@ -14,8 +14,7 @@ require("dotenv").config();
 connectDB();
 
 // Middleware
-app.use(express.json({ limit: "50mb" })),
-  app.use(express.urlencoded({ extended: false }));
+app.use(express.json({ limit: "50mb" })), app.use(express.urlencoded({ extended: false }));
 
 // Routes
 app.use("/product", require("./routes/product.routes"));
@@ -44,10 +43,7 @@ bcrypt.hash(userPassword, saltRounds, function (err, hash) {
 
     try {
       // check password
-      const isPasswordValid = await bcrypt.compare(
-        password,
-        process.env.ADMIN_PASSWORD
-      );
+      const isPasswordValid = await bcrypt.compare(password, process.env.ADMIN_PASSWORD);
 
       if (!isPasswordValid) {
         return res.status(401).json({ message: "Mot de passe incorrect" });

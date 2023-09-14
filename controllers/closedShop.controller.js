@@ -4,11 +4,7 @@ module.exports.updateClosedShop = async (req, res) => {
   try {
     const { closedShop: newClosedShop } = req.body;
     console.log(req.body);
-    await ClosedShop.findOneAndUpdate(
-      {},
-      { value: newClosedShop },
-      { upsert: true }
-    );
+    await ClosedShop.findOneAndUpdate({}, { value: newClosedShop }, { upsert: true });
 
     res.json({ closedShop: newClosedShop });
   } catch (error) {
@@ -36,11 +32,7 @@ module.exports.updateClosedShopMessage = async (req, res) => {
     const { message } = req.body;
     console.log(req.body, "body");
 
-    await ClosedShop.findOneAndUpdate(
-      {},
-      { message: message },
-      { upsert: true }
-    );
+    await ClosedShop.findOneAndUpdate({}, { message: message }, { upsert: true });
 
     res.json({ message: message });
   } catch (error) {
