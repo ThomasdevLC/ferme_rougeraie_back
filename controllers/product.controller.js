@@ -71,7 +71,8 @@ module.exports.deleteProduct = async (req, res) => {
     res.status(400).json({ error: "Product not found" });
   }
   // Delete image file
-  const imagePath = path.join(__dirname, "../images", product.image.split("/images/")[1]);
+  console.log(product.image);
+  const imagePath = path.join(__dirname, "../images", product.image);
   if (fs.existsSync(imagePath)) {
     fs.unlinkSync(imagePath);
   }
