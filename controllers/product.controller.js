@@ -38,22 +38,16 @@ module.exports.editProduct = async (req, res) => {
       isDisplayed,
     };
 
-    // Check if an image file was uploaded
     if (req.file) {
-      // Fetch the existing product to get the old image path
+      updateData.image = req.file.filename;
       const existingProduct = await ProductModel.findById(id);
       if (existingProduct) {
-        // Delete the old image
-        const oldImagePath = path.join(__dirname, "../images", existingProduct.image.split("/images/")[1]);
+        const oldImagePath = path.join(__dirname, "../images", existingProduct.image);
         if (fs.existsSync(oldImagePath)) {
           fs.unlinkSync(oldImagePath);
         }
       }
-
-      // Update the image URL with the new image
-      updateData.image = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
     }
-
     const product = await ProductModel.findByIdAndUpdate(id, updateData, {
       new: true,
     });
@@ -71,7 +65,6 @@ module.exports.deleteProduct = async (req, res) => {
     res.status(400).json({ error: "Product not found" });
   }
   // Delete image file
-  console.log(product.image);
   const imagePath = path.join(__dirname, "../images", product.image);
   if (fs.existsSync(imagePath)) {
     fs.unlinkSync(imagePath);
