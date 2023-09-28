@@ -21,9 +21,45 @@ module.exports.createProduct = async (req, res) => {
     limited: false,
     image: req.file.filename,
   });
+  console.log("add", req.file.filename);
 
   res.status(200).json(product);
 };
+
+// module.exports.editProduct = async (req, res) => {
+//   try {
+//     const { id } = req.params;
+//     const { name, price, unit, interval, isDisplayed } = req.body;
+
+//     let updateData = {
+//       name,
+//       price,
+//       unit,
+//       interval,
+//       isDisplayed,
+//     };
+
+//     if (req.file) {
+//       updateData.image = req.file.filename;
+//       console.log("updateData", req.file.filename);
+
+//       const existingProduct = await ProductModel.findById(id);
+//       if (existingProduct) {
+//         const oldImagePath = path.join(__dirname, "../images", existingProduct.image);
+//         if (fs.existsSync(oldImagePath)) {
+//           fs.unlinkSync(oldImagePath);
+//         }
+//       }
+//     }
+//     const product = await ProductModel.findByIdAndUpdate(id, updateData, {
+//       new: true,
+//     });
+
+//     res.status(200).json(product);
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   }
+// };
 
 module.exports.editProduct = async (req, res) => {
   try {
@@ -39,15 +75,16 @@ module.exports.editProduct = async (req, res) => {
     };
 
     if (req.file) {
-      updateData.image = req.file.filename;
       const existingProduct = await ProductModel.findById(id);
       if (existingProduct) {
-        const oldImagePath = path.join(__dirname, "../images", existingProduct.image);
+        const oldImagePath = path.join(__dirname, "../images", existingProduct.image.split("/images/")[1]);
         if (fs.existsSync(oldImagePath)) {
           fs.unlinkSync(oldImagePath);
         }
       }
+      updateData.image = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
     }
+
     const product = await ProductModel.findByIdAndUpdate(id, updateData, {
       new: true,
     });
@@ -72,6 +109,25 @@ module.exports.deleteProduct = async (req, res) => {
 
   await product.deleteOne();
   res.status(200).json("product " + req.params.id + " deleted");
+};
+
+module.exports.updateDisplay = async (req, res) => {
+  try {
+    const product = await ProductModel.findById(req.params.id);
+
+    if (!product) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+
+    product.isDisplayed = !product.isDisplayed;
+
+    const updatedProduct = await product.save();
+
+    res.json(updatedProduct);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server error" });
+  }
 };
 
 module.exports.updateDisplay = async (req, res) => {
