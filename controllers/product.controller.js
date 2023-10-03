@@ -21,7 +21,6 @@ module.exports.createProduct = async (req, res) => {
     limited: false,
     image: req.file.filename,
   });
-  console.log("add", req.file.filename);
 
   res.status(200).json(product);
 };
@@ -45,7 +44,9 @@ module.exports.editProduct = async (req, res) => {
 
       const existingProduct = await ProductModel.findById(id);
       if (existingProduct) {
-        const oldImagePath = path.join(__dirname, "../images", existingProduct.image);
+        const imageDirectory = process.env.SELF_URI; // Récupérez la variable d'environnement
+        const oldImagePath = path.join(imageDirectory, existingProduct.image);
+        console.log("oldImagePath", oldImagePath);
         if (fs.existsSync(oldImagePath)) {
           fs.unlinkSync(oldImagePath);
         }
