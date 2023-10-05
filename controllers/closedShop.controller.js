@@ -3,7 +3,6 @@ const ClosedShop = require("../models/closedShop.model");
 module.exports.updateClosedShop = async (req, res) => {
   try {
     const { closedShop: newClosedShop } = req.body;
-    console.log(req.body);
     await ClosedShop.findOneAndUpdate({}, { value: newClosedShop }, { upsert: true });
 
     res.json({ closedShop: newClosedShop });
@@ -30,8 +29,6 @@ module.exports.getClosedShop = async (req, res) => {
 module.exports.updateClosedShopMessage = async (req, res) => {
   try {
     const { message } = req.body;
-    console.log(req.body, "body");
-
     await ClosedShop.findOneAndUpdate({}, { message: message }, { upsert: true });
 
     res.json({ message: message });

@@ -32,14 +32,10 @@ bcrypt.hash(userPassword, saltRounds, function (err, hash) {
     return;
   }
   process.env.ADMIN_PASSWORD = hash;
-  console.log("Hashed password:", hash);
 
   // connection
   app.post("/auth/login", async (req, res) => {
     const { password } = req.body;
-
-    console.log("ADMIN_PASSWORD:", process.env.ADMIN_PASSWORD);
-    console.log("Password provided:", password);
 
     try {
       // check password

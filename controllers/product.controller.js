@@ -44,7 +44,7 @@ module.exports.editProduct = async (req, res) => {
 
       const existingProduct = await ProductModel.findById(id);
       if (existingProduct) {
-        const imageDirectory = process.env.SELF_URI; // Récupérez la variable d'environnement
+        const imageDirectory = process.env.SELF_URI;
         const oldImagePath = path.join(imageDirectory, existingProduct.image);
         console.log("oldImagePath", oldImagePath);
         if (fs.existsSync(oldImagePath)) {
