@@ -47,6 +47,8 @@ module.exports.editProduct = async (req, res) => {
         const imageDirectory = process.env.SELF_URI;
         const oldImagePath = path.join(imageDirectory, existingProduct.image);
         console.log("oldImagePath", oldImagePath);
+        console.log("existingProduct.image", existingProduct.image);
+        console;
         if (fs.existsSync(oldImagePath)) {
           fs.unlinkSync(oldImagePath);
         }

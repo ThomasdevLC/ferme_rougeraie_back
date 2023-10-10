@@ -20,7 +20,7 @@ app.use(express.json({ limit: "50mb" })), app.use(express.urlencoded({ extended:
 app.use("/product", require("./routes/product.routes"));
 app.use("/order", require("./routes/order.routes"));
 app.use("/closedShop", require("./routes/closedShop.routes"));
-app.use("/images", express.static(path.join(__dirname, "images")));
+app.use("/images", express.static(path.resolve(__dirname, "images")));
 
 // Hash the password
 const saltRounds = 10;
