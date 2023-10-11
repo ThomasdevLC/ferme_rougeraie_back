@@ -40,19 +40,19 @@ module.exports.editProduct = async (req, res) => {
 
     if (req.file) {
       updateData.image = req.file.filename;
-      console.log("updateData", req.file.filename);
+      // console.log("updateData", req.file.filename);
 
-      const existingProduct = await ProductModel.findById(id);
-      if (existingProduct) {
-        const imageDirectory = process.env.SELF_URI;
-        const oldImagePath = path.join(imageDirectory, existingProduct.image);
-        console.log("oldImagePath", oldImagePath);
-        console.log("existingProduct.image", existingProduct.image);
-        console;
-        if (fs.existsSync(oldImagePath)) {
-          fs.unlinkSync(oldImagePath);
-        }
-      }
+      // const existingProduct = await ProductModel.findById(id);
+      // if (existingProduct) {
+      //   const imageDirectory = process.env.SELF_URI;
+      //   const oldImagePath = path.join(imageDirectory, existingProduct.image);
+      //   console.log("oldImagePath", oldImagePath);
+      //   console.log("existingProduct.image", existingProduct.image);
+      //   console;
+      //   if (fs.existsSync(oldImagePath)) {
+      //     fs.unlinkSync(oldImagePath);
+      //   }
+      // }
     }
     const product = await ProductModel.findByIdAndUpdate(id, updateData, {
       new: true,
