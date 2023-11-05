@@ -112,7 +112,6 @@ module.exports.updateDisplay = async (req, res) => {
   }
 };
 
-//updtate
 module.exports.updateLimited = async (req, res) => {
   try {
     const product = await ProductModel.findById(req.params.id);
